@@ -1,0 +1,23 @@
+{
+  "name": "ibureau",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Diogo Nechtan <dnechtan@gmail.com>",
+  "scripts": {
+    "start": "DEBUG=ibureau:* node ./bin/www",
+    "nodemon": "DEBUG=ibureau:* nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "iconv-lite": "^0.5.1",
+    "less-middleware": "~2.2.1",
+    "mongodb": "^3.5.2",
+    "mongoose": "^5.8.11",
+    "morgan": "~1.9.1",
+    "pug": "^2.0.4"
+  }
+}

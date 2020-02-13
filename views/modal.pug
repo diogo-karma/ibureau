@@ -1,0 +1,109 @@
+#modalDetails.modal.fade.modal-xl(tabindex='-1' role='dialog' aria-labelledby='modalDetailsTitle' aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5#modalDetailsTitle.modal-title Câmara Municipal de Chapecó
+        button.close(type='button' data-dismiss='modal' aria-label='Fechar')
+          span(aria-hidden='true') &times;
+      .modal-body
+        #accTitle.accordion
+          h1#prjTitle {{ project.title }}
+            | &nbsp;
+            small.text-muted de 
+              span#prjDate {{ project.date? new Date(project.date).toLocaleDateString("pt-BR"): "" }}
+          .card
+              .card-body
+                .row
+                  .col-sm
+                    strong Situação
+                  .col-sm {{ project['Situação'] }}
+
+                .row
+                  .col-sm
+                    strong Trâmite
+                  .col-sm {{ project['Trâmite'] }}
+                    
+                .row
+                  .col-sm
+                    strong Regime
+                  .col-sm {{ project['Regime'] }}
+                    
+                .row
+                  .col-sm
+                    strong Assunto
+                  .col-sm {{ project['Assunto'] }}
+                    
+                .row
+                  .col-sm
+                    strong Autor
+                  .col-sm(v-html="project['Autor']")
+
+        #accOfficialDoc.accordion(v-if="project.doc")
+          .card
+            #headingOfficialDoc.card-header
+              h2.mb-0
+                button.btn.btn-link(type='button' data-toggle='collapse' data-target='#collapseOfficialDoc' aria-expanded='true' aria-controls='collapseOfficialDoc')
+                  | Documento Oficial
+            #collapseOfficialDoc.collapse(aria-labelledby='headingOfficialDoc' data-parent='#accOfficialDoc')
+              .card-body
+                a(:href="project.doc", v-on:click="downloadDoc") Baixar Arquivo
+                
+        #accParecer.accordion(v-if="project.parecer && project.parecer.length")
+          .card
+            #headingParecer.card-header
+              h2.mb-0
+                button.btn.btn-link(type='button' data-toggle='collapse' data-target='#collapseParecer' aria-expanded='true' aria-controls='collapseParecer')
+                  | Parecer 
+                  | &nbsp;
+                  span.badge.badge-primary.badge-pill {{ project.parecer.length || 0 }}
+            #collapseParecer.collapse(aria-labelledby='headingParecer' data-parent='#accParecer')
+              .card-body
+                .list-group(v-for="(parecer, index) in project.parecer")
+                  a.list-group-item.list-group-item-action.list-group-item-light.d-flex.justify-content-between.align-items-start(:href="parecer.file" v-on:click="downloadDoc" title='Baixar Arquivo')
+                    | {{ parecer.title }}
+                
+        #accTramite.accordion(v-if="project.tramite")
+          .card
+            #headingTramite.card-header
+              h2.mb-0
+                button.btn.btn-link(type='button' data-toggle='collapse' data-target='#collapseTramite' aria-expanded='true' aria-controls='collapseTramite')
+                  | Trâmite
+                  | &nbsp;
+                  span.badge.badge-primary.badge-pill {{ project.tramite.length || 0 }}
+            #collapseTramite.collapse(aria-labelledby='headingTramite' data-parent='#accTramite')
+              .card-body
+                table.table
+                  thead
+                    tr.alert-info
+                      th(width='80%') Projeto
+                      th Entrada
+                      th Prazo
+                      th Devolu&ccedil;&atilde;o
+                  tbody
+                    tr(v-for="(tramite, index) in project.tramite")
+                      td(info-col='Projeto')
+                        dl
+                          dt {{ tramite['Projeto'] }}
+                      td(info-col='Entrada') {{ tramite['Entrada'] }}
+                      td(info-col='Prazo') {{ tramite['Prazo'] }}
+                      td(info-col='Devolução') {{ tramite['Devolução'] }}
+            
+        #accEmenta.accordion
+          .card
+            #headingEmenta.card-header
+              h2.mb-0
+                button.btn.btn-link(type='button' data-toggle='collapse' data-target='#collapseEmenta' aria-expanded='true' aria-controls='collapseEmenta')
+                  | Ementa
+            #collapseEmenta.collapse(aria-labelledby='headingEmenta' data-parent='#accEmenta')
+              .card-body
+                | {{ project.Ementa }}
+                
+        #accText.accordion
+          .card
+            #headingText.card-header
+              h2.mb-0
+                button.btn.btn-link(type='button' data-toggle='collapse' data-target='#collapseText' aria-expanded='true' aria-controls='collapseText')
+                  | Texto
+            #collapseText.collapse(aria-labelledby='headingText' data-parent='#accText')
+              .card-body
+                p#accContentText(v-html="project.project_text")
